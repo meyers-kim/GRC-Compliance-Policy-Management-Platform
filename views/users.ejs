@@ -1,0 +1,58 @@
+<%- include('partials/header', { title, page }) %>
+
+<section class="page-heading">
+  <div>
+    <span class="eyebrow">Access & ownership</span>
+    <h1>Users and roles</h1>
+    <p class="muted">Overview of access roles, department ownership, and contribution across the GRC workspace.</p>
+  </div>
+</section>
+
+<section class="stat-grid four-up compact-grid">
+  <% accessStats.forEach(item => { %>
+    <article class="stat-card small">
+      <span class="stat-label"><%= item.role %></span>
+      <strong class="stat-value"><%= item.count %></strong>
+      <span class="stat-note">Assigned users</span>
+    </article>
+  <% }) %>
+</section>
+
+<section class="table-card card">
+  <div class="card-heading-row">
+    <h2>User directory</h2>
+    <span class="muted">Ownership and contribution overview</span>
+  </div>
+
+  <div class="table-responsive">
+    <table>
+      <thead>
+        <tr>
+          <th>User</th>
+          <th>Department</th>
+          <th>Access role</th>
+          <th>Open obligations</th>
+          <th>Tracked policies</th>
+          <th>Acknowledgements</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% users.forEach(user => { %>
+          <tr>
+            <td>
+              <strong><%= user.name %></strong>
+              <div class="table-subtext"><%= user.role %> • <%= user.location %></div>
+            </td>
+            <td><%= user.department %></td>
+            <td><span class="badge neutral"><%= user.accessRole %></span></td>
+            <td><%= user.openObligations %></td>
+            <td><%= user.policyCount %></td>
+            <td><%= user.acknowledgements %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,47 @@
+<%- include('partials/header', { title, page }) %>
+
+<section class="page-heading">
+  <div>
+    <span class="eyebrow">Traceability</span>
+    <h1>Activity log</h1>
+    <p class="muted">Central record of changes, acknowledgements, and ownership updates across the portal.</p>
+  </div>
+</section>
+
+<section class="table-card card">
+  <div class="card-heading-row">
+    <h2>Recent system activity</h2>
+    <span class="muted">Newest actions first</span>
+  </div>
+
+  <% if (activity.length === 0) { %>
+    <p class="empty-state">No activity is available yet.</p>
+  <% } else { %>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Timestamp</th>
+            <th>Action</th>
+            <th>Actor</th>
+            <th>Record</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% activity.forEach(entry => { %>
+            <tr>
+              <td><%= formatDateTime(entry.timestamp) %></td>
+              <td><span class="badge neutral"><%= entry.label %></span></td>
+              <td><%= entry.actor ? entry.actor.name : 'Unknown user' %></td>
+              <td><a href="<%= entry.href %>"><strong><%= entry.entityLabel %></strong></a></td>
+              <td><%= entry.message %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>
+
+<%- include('partials/footer') %>

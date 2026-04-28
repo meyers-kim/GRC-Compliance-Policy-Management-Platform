@@ -1,0 +1,47 @@
+[
+  {
+    "id": "u1",
+    "name": "Antoine Baudet",
+    "role": "Head of Compliance",
+    "department": "Compliance",
+    "accessRole": "Compliance Manager",
+    "initials": "AB",
+    "location": "Luxembourg"
+  },
+  {
+    "id": "u2",
+    "name": "Kim Meyers",
+    "role": "Security Governance Lead",
+    "department": "Information Security",
+    "accessRole": "Policy Owner",
+    "initials": "KM",
+    "location": "Brussels"
+  },
+  {
+    "id": "u3",
+    "name": "Lejla Osmanovic",
+    "role": "Privacy & HR Governance Lead",
+    "department": "People & Privacy",
+    "accessRole": "Policy Owner",
+    "initials": "LO",
+    "location": "Vienna"
+  },
+  {
+    "id": "u4",
+    "name": "Matteo Teofoli",
+    "role": "Third-Party Risk Manager",
+    "department": "Risk",
+    "accessRole": "Risk Manager",
+    "initials": "MT",
+    "location": "Milan"
+  },
+  {
+    "id": "u5",
+    "name": "Noah Stelmes",
+    "role": "Operations Coordinator",
+    "department": "Operations",
+    "accessRole": "Employee",
+    "initials": "NS",
+    "location": "Amsterdam"
+  }
+]

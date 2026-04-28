@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <% const safeCurrentUser = typeof currentUser !== 'undefined' ? currentUser : ((typeof locals !== 'undefined' && locals.currentUser) ? locals.currentUser : null); %>
+  <% const safeUserDirectory = typeof userDirectory !== 'undefined' ? userDirectory : ((typeof locals !== 'undefined' && locals.userDirectory) ? locals.userDirectory : []); %>
+  <% const safeCurrentPath = typeof currentPath !== 'undefined' ? currentPath : ((typeof locals !== 'undefined' && locals.currentPath) ? locals.currentPath : '/'); %>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %> | GRC Portal</title>
+    <meta name="description" content="Enterprise-style governance, risk and compliance portal for managing obligations, policies, activity records, and user ownership." />
+    <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="page-<%= page || 'default' %>">
+    <div class="ambient-orb orb-a"></div>
+    <div class="ambient-orb orb-b"></div>
+    <div class="ambient-orb orb-c"></div>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a href="/" class="brand">
+          <img src="/logo.svg" alt="GRC Portal logo" class="brand-logo" />
+          <div>
+            <strong>GRC Portal</strong>
+            <span>Control & compliance center</span>
+          </div>
+        </a>
+
+        <div class="sidebar-section-label">Workspace</div>
+        <nav class="sidebar-nav">
+          <a class="<%= page === 'dashboard' ? 'active' : '' %>" href="/"><span class="nav-icon">⌂</span><span>Dashboard</span></a>
+          <a class="<%= page === 'obligations' ? 'active' : '' %>" href="/obligations"><span class="nav-icon">◎</span><span>Obligations</span></a>
+          <a class="<%= page === 'policies' ? 'active' : '' %>" href="/policies"><span class="nav-icon">▤</span><span>Policy library</span></a>
+          <a class="<%= page === 'activity' ? 'active' : '' %>" href="/activity"><span class="nav-icon">◷</span><span>Activity log</span></a>
+          <a class="<%= page === 'users' ? 'active' : '' %>" href="/users"><span class="nav-icon">◉</span><span>Users & roles</span></a>
+        </nav>
+
+        <section class="sidebar-card">
+          <div class="sidebar-card-top">
+            <span class="eyebrow dark">Active profile</span>
+            <span class="sidebar-status-dot"></span>
+          </div>
+          <% if (safeCurrentUser) { %>
+            <div class="profile-mini">
+              <div class="avatar"><%= safeCurrentUser.initials || safeCurrentUser.name.slice(0, 2).toUpperCase() %></div>
+              <div>
+                <strong><%= safeCurrentUser.name %></strong>
+                <span><%= safeCurrentUser.accessRole %></span>
+              </div>
+            </div>
+            <div class="profile-meta-grid">
+              <div>
+                <small>Department</small>
+                <strong><%= safeCurrentUser.department %></strong>
+              </div>
+              <div>
+                <small>Location</small>
+                <strong><%= safeCurrentUser.location %></strong>
+              </div>
+            </div>
+          <% } %>
+          <p class="muted small-copy sidebar-copy">The active profile defines current ownership visibility, approval permissions, and responsibility context across the workspace.</p>
+        </section>
+      </aside>
+
+      <div class="workspace">
+        <header class="topbar reveal">
+          <div class="topbar-copy">
+            <span class="eyebrow">Integrated governance workspace</span>
+            <h2><%= title %></h2>
+          </div>
+
+          <div class="topbar-actions">
+            <div class="company-chip"><span class="company-dot"></span>Astera Control Group</div>
+            <form class="switcher-form" method="POST" action="/session/user">
+              <input type="hidden" name="returnTo" value="<%= safeCurrentPath %>" />
+              <label for="userId" class="sr-only">Switch user</label>
+              <select id="userId" name="userId" onchange="this.form.submit()">
+                <% safeUserDirectory.forEach(user => { %>
+                  <option value="<%= user.id %>" <%= safeCurrentUser && safeCurrentUser.id === user.id ? 'selected' : '' %>><%= user.name %> — <%= user.accessRole %></option>
+                <% }) %>
+              </select>
+            </form>
+          </div>
+        </header>
+        <main class="page-shell">
+          <% if (flashSuccess) { %>
+            <div class="flash success reveal"><%= flashSuccess %></div>
+          <% } %>

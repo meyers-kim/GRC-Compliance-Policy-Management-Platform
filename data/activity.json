@@ -1,0 +1,62 @@
+[
+  {
+    "id": "a1",
+    "timestamp": "2026-04-19T09:12:00.000Z",
+    "actorUserId": "u1",
+    "actionType": "policy_review",
+    "message": "Updated review timeline for Data Retention Policy.",
+    "entityType": "policy",
+    "entityId": "p2",
+    "entityLabel": "Data Retention Policy"
+  },
+  {
+    "id": "a2",
+    "timestamp": "2026-04-18T15:40:00.000Z",
+    "actorUserId": "u4",
+    "actionType": "obligation_update",
+    "message": "Added supplier evidence requirement to the vendor risk questionnaire action plan.",
+    "entityType": "obligation",
+    "entityId": "o4",
+    "entityLabel": "Update third-party risk questionnaire"
+  },
+  {
+    "id": "a3",
+    "timestamp": "2026-04-17T08:25:00.000Z",
+    "actorUserId": "u5",
+    "actionType": "policy_acknowledged",
+    "message": "Confirmed reading of Acceptable Use Policy.",
+    "entityType": "policy",
+    "entityId": "p3",
+    "entityLabel": "Acceptable Use Policy"
+  },
+  {
+    "id": "a4",
+    "timestamp": "2026-04-15T10:05:00.000Z",
+    "actorUserId": "u2",
+    "actionType": "obligation_completed",
+    "message": "Closed the annual access review and attached audit evidence.",
+    "entityType": "obligation",
+    "entityId": "o3",
+    "entityLabel": "Complete annual access review"
+  },
+  {
+    "id": "a5",
+    "timestamp": "2026-04-12T14:20:00.000Z",
+    "actorUserId": "u4",
+    "actionType": "policy_created",
+    "message": "Created a new draft of the Vendor Risk Standard.",
+    "entityType": "policy",
+    "entityId": "p4",
+    "entityLabel": "Vendor Risk Standard"
+  },
+  {
+    "id": "a6",
+    "timestamp": "2026-04-10T11:50:00.000Z",
+    "actorUserId": "u1",
+    "actionType": "obligation_created",
+    "message": "Registered a privacy notice review obligation for the HR workflow.",
+    "entityType": "obligation",
+    "entityId": "o2",
+    "entityLabel": "Review employee privacy notice"
+  }
+]

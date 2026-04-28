@@ -1,0 +1,85 @@
+<%- include('partials/header', { title, page }) %>
+
+<section class="page-heading compact-page-heading">
+  <div>
+    <span class="eyebrow">Compliance register</span>
+    <h1><%= obligation ? 'Edit obligation' : 'Create obligation' %></h1>
+    <p class="muted">Capture what the company must comply with, who owns it, and how evidence is tracked.</p>
+  </div>
+  <div class="actions">
+    <a class="btn secondary" href="/obligations">Back to obligations</a>
+  </div>
+</section>
+
+<section class="form-card card">
+  <form method="POST" action="<%= formAction %>">
+    <div class="form-grid">
+      <div>
+        <label for="title">Title</label>
+        <input id="title" name="title" value="<%= obligation?.title || '' %>" required />
+      </div>
+
+      <div>
+        <label for="source">Source</label>
+        <input id="source" name="source" value="<%= obligation?.source || '' %>" placeholder="GDPR, NIS2, ISO 27001..." required />
+      </div>
+
+      <div>
+        <label for="category">Category</label>
+        <input id="category" name="category" value="<%= obligation?.category || '' %>" placeholder="Data Protection, Security..." required />
+      </div>
+
+      <div>
+        <label for="ownerId">Owner</label>
+        <select id="ownerId" name="ownerId" required>
+          <option value="">Select an owner</option>
+          <% users.forEach(user => { %>
+            <option value="<%= user.id %>" <%= obligation?.ownerId === user.id ? 'selected' : '' %>>
+              <%= user.name %> — <%= user.role %>
+            </option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div>
+        <label for="status">Status</label>
+        <select id="status" name="status" required>
+          <% ['Open', 'In Progress', 'Completed'].forEach(option => { %>
+            <option value="<%= option %>" <%= obligation?.status === option ? 'selected' : '' %>><%= option %></option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div>
+        <label for="deadline">Deadline</label>
+        <input id="deadline" type="date" name="deadline" value="<%= obligation?.deadline || '' %>" />
+      </div>
+    </div>
+
+    <div class="form-stack">
+      <div>
+        <label for="actions">Required actions</label>
+        <textarea id="actions" name="actions" placeholder="Use commas to separate actions"><%= obligation?.actions?.join(', ') || '' %></textarea>
+        <small class="help-text">Example: Update process, validate roles, train employees</small>
+      </div>
+
+      <div>
+        <label for="evidence">Evidence / documents</label>
+        <textarea id="evidence" name="evidence" placeholder="Use commas to separate documents"><%= obligation?.evidence?.join(', ') || '' %></textarea>
+        <small class="help-text">Example: procedure.pdf, audit-notes.docx</small>
+      </div>
+
+      <div>
+        <label for="notes">Notes</label>
+        <textarea id="notes" name="notes" placeholder="Additional context, blockers, review notes..."><%= obligation?.notes || '' %></textarea>
+      </div>
+    </div>
+
+    <div class="actions form-actions">
+      <button type="submit"><%= submitLabel %></button>
+      <a class="btn ghost" href="/obligations">Cancel</a>
+    </div>
+  </form>
+</section>
+
+<%- include('partials/footer') %>

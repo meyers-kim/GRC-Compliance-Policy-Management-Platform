@@ -1,0 +1,92 @@
+<%- include('partials/header', { title, page }) %>
+
+<section class="page-heading">
+  <div>
+    <span class="eyebrow">Policy library</span>
+    <h1>Internal policies</h1>
+    <p class="muted">Manage policy versions, owners, review cycles, and employee acknowledgement records.</p>
+  </div>
+  <div class="actions">
+    <a class="btn" href="/policies/new">Add policy</a>
+  </div>
+</section>
+
+<section class="stat-grid four-up compact-grid">
+  <article class="stat-card small"><span class="stat-label">Shown items</span><strong class="stat-value"><%= stats.total %></strong></article>
+  <article class="stat-card small"><span class="stat-label">Overdue</span><strong class="stat-value"><%= stats.overdue %></strong></article>
+  <article class="stat-card small"><span class="stat-label">Due soon</span><strong class="stat-value"><%= stats.dueSoon %></strong></article>
+  <article class="stat-card small"><span class="stat-label">Approved</span><strong class="stat-value"><%= stats.approved %></strong></article>
+</section>
+
+<section class="card filter-card">
+  <form method="GET" action="/policies" class="filters-grid">
+    <div>
+      <label for="q">Search</label>
+      <input id="q" name="q" value="<%= filters.q %>" placeholder="Search title, owner, version..." />
+    </div>
+    <div>
+      <label for="status">Status</label>
+      <select id="status" name="status">
+        <option value="">All statuses</option>
+        <% ['Draft', 'Under Review', 'Approved'].forEach(option => { %>
+          <option value="<%= option %>" <%= filters.status === option ? 'selected' : '' %>><%= option %></option>
+        <% }) %>
+      </select>
+    </div>
+    <div class="filters-actions">
+      <button type="submit">Apply filters</button>
+      <a class="btn ghost" href="/policies">Reset</a>
+    </div>
+  </form>
+</section>
+
+<section class="table-card card">
+  <div class="card-heading-row">
+    <h2>Policy library</h2>
+    <span class="muted">Review and acknowledgement tracking</span>
+  </div>
+
+  <% if (policies.length === 0) { %>
+    <p class="empty-state">No policies match the current filters.</p>
+  <% } else { %>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Owner</th>
+            <th>Status</th>
+            <th>Review date</th>
+            <th>Acknowledgements</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% policies.forEach(item => { %>
+            <tr>
+              <td>
+                <a href="/policies/<%= item.id %>"><strong><%= item.title %></strong></a>
+                <div class="table-subtext">Version <%= item.version %></div>
+              </td>
+              <td><%= item.owner ? item.owner.name : 'Unknown' %></td>
+              <td><span class="badge <%= statusClass(item.status, item.overdue) %>"><%= item.status %></span></td>
+              <td><%= formatDate(item.nextReviewDate) %></td>
+              <td><%= item.acknowledgementCount %></td>
+              <td>
+                <div class="row-actions">
+                  <a class="btn ghost small" href="/policies/<%= item.id %>">View</a>
+                  <a class="btn secondary small" href="/policies/<%= item.id %>/edit">Edit</a>
+                  <form class="inline" method="POST" action="/policies/<%= item.id %>/delete" data-confirm="Delete this policy?">
+                    <button class="danger small" type="submit">Delete</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>
+
+<%- include('partials/footer') %>

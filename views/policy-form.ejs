@@ -1,0 +1,78 @@
+<%- include('partials/header', { title, page }) %>
+
+<section class="page-heading compact-page-heading">
+  <div>
+    <span class="eyebrow">Policy library</span>
+    <h1><%= policy ? 'Edit policy' : 'Create policy' %></h1>
+    <p class="muted">Store policy ownership, versioning, review dates, and linked documentation.</p>
+  </div>
+  <div class="actions">
+    <a class="btn secondary" href="/policies">Back to policies</a>
+  </div>
+</section>
+
+<section class="form-card card">
+  <form method="POST" action="<%= formAction %>">
+    <div class="form-grid">
+      <div>
+        <label for="title">Title</label>
+        <input id="title" name="title" value="<%= policy?.title || '' %>" required />
+      </div>
+
+      <div>
+        <label for="version">Version</label>
+        <input id="version" name="version" value="<%= policy?.version || '' %>" placeholder="1.0" required />
+      </div>
+
+      <div>
+        <label for="ownerId">Owner</label>
+        <select id="ownerId" name="ownerId" required>
+          <option value="">Select an owner</option>
+          <% users.forEach(user => { %>
+            <option value="<%= user.id %>" <%= policy?.ownerId === user.id ? 'selected' : '' %>>
+              <%= user.name %> — <%= user.role %>
+            </option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div>
+        <label for="status">Status</label>
+        <select id="status" name="status" required>
+          <% ['Draft', 'Under Review', 'Approved'].forEach(option => { %>
+            <option value="<%= option %>" <%= policy?.status === option ? 'selected' : '' %>><%= option %></option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div>
+        <label for="lastReviewed">Last reviewed</label>
+        <input id="lastReviewed" type="date" name="lastReviewed" value="<%= policy?.lastReviewed || '' %>" />
+      </div>
+
+      <div>
+        <label for="nextReviewDate">Next review date</label>
+        <input id="nextReviewDate" type="date" name="nextReviewDate" value="<%= policy?.nextReviewDate || '' %>" />
+      </div>
+
+      <div class="span-2">
+        <label for="documentPath">Document link</label>
+        <input id="documentPath" name="documentPath" value="<%= policy?.documentPath || '' %>" placeholder="/documents/information-security-policy.html" />
+      </div>
+    </div>
+
+    <div class="form-stack">
+      <div>
+        <label for="summary">Summary</label>
+        <textarea id="summary" name="summary" placeholder="Describe the purpose and scope of the policy"><%= policy?.summary || '' %></textarea>
+      </div>
+    </div>
+
+    <div class="actions form-actions">
+      <button type="submit"><%= submitLabel %></button>
+      <a class="btn ghost" href="/policies">Cancel</a>
+    </div>
+  </form>
+</section>
+
+<%- include('partials/footer') %>

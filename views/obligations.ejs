@@ -1,0 +1,92 @@
+<%- include('partials/header', { title, page }) %>
+
+<section class="page-heading">
+  <div>
+    <span class="eyebrow">Compliance register</span>
+    <h1>Compliance obligations</h1>
+    <p class="muted">Track applicable requirements, owners, actions, evidence, and deadlines.</p>
+  </div>
+  <div class="actions">
+    <a class="btn" href="/obligations/new">Add obligation</a>
+  </div>
+</section>
+
+<section class="stat-grid four-up compact-grid">
+  <article class="stat-card small"><span class="stat-label">Shown items</span><strong class="stat-value"><%= stats.total %></strong></article>
+  <article class="stat-card small"><span class="stat-label">Overdue</span><strong class="stat-value"><%= stats.overdue %></strong></article>
+  <article class="stat-card small"><span class="stat-label">Due soon</span><strong class="stat-value"><%= stats.dueSoon %></strong></article>
+  <article class="stat-card small"><span class="stat-label">Completed</span><strong class="stat-value"><%= stats.completed %></strong></article>
+</section>
+
+<section class="card filter-card">
+  <form method="GET" action="/obligations" class="filters-grid">
+    <div>
+      <label for="q">Search</label>
+      <input id="q" name="q" value="<%= filters.q %>" placeholder="Search title, source, owner..." />
+    </div>
+    <div>
+      <label for="status">Status</label>
+      <select id="status" name="status">
+        <option value="">All statuses</option>
+        <% ['Open', 'In Progress', 'Completed'].forEach(option => { %>
+          <option value="<%= option %>" <%= filters.status === option ? 'selected' : '' %>><%= option %></option>
+        <% }) %>
+      </select>
+    </div>
+    <div class="filters-actions">
+      <button type="submit">Apply filters</button>
+      <a class="btn ghost" href="/obligations">Reset</a>
+    </div>
+  </form>
+</section>
+
+<section class="table-card card">
+  <div class="card-heading-row">
+    <h2>Obligation register</h2>
+    <span class="muted">Detailed compliance tracking</span>
+  </div>
+
+  <% if (obligations.length === 0) { %>
+    <p class="empty-state">No obligations match the current filters.</p>
+  <% } else { %>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Source</th>
+            <th>Owner</th>
+            <th>Status</th>
+            <th>Deadline</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% obligations.forEach(item => { %>
+            <tr>
+              <td>
+                <a href="/obligations/<%= item.id %>"><strong><%= item.title %></strong></a>
+                <div class="table-subtext"><%= item.category %></div>
+              </td>
+              <td><%= item.source %></td>
+              <td><%= item.owner ? item.owner.name : 'Unknown' %></td>
+              <td><span class="badge <%= statusClass(item.status, item.overdue) %>"><%= item.status %></span></td>
+              <td><%= formatDate(item.deadline) %></td>
+              <td>
+                <div class="row-actions">
+                  <a class="btn ghost small" href="/obligations/<%= item.id %>">View</a>
+                  <a class="btn secondary small" href="/obligations/<%= item.id %>/edit">Edit</a>
+                  <form class="inline" method="POST" action="/obligations/<%= item.id %>/delete" data-confirm="Delete this obligation?">
+                    <button class="danger small" type="submit">Delete</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>
+
+<%- include('partials/footer') %>

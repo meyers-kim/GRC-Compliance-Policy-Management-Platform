@@ -1,0 +1,68 @@
+[
+  {
+    "id": "p1",
+    "title": "Information Security Policy",
+    "version": "1.2",
+    "ownerId": "u2",
+    "status": "Approved",
+    "lastReviewed": "2026-02-10",
+    "nextReviewDate": "2026-08-10",
+    "documentPath": "/documents/information-security-policy.html",
+    "summary": "Defines security principles, roles, access expectations, and acceptable use requirements.",
+    "acknowledgements": [
+      {
+        "userId": "u5",
+        "readAt": "2026-03-05T10:15:00.000Z"
+      },
+      {
+        "userId": "u3",
+        "readAt": "2026-04-01T08:45:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "p2",
+    "title": "Data Retention Policy",
+    "version": "1.0",
+    "ownerId": "u1",
+    "status": "Under Review",
+    "lastReviewed": "2026-01-22",
+    "nextReviewDate": "2026-04-25",
+    "documentPath": "/documents/data-retention-policy.html",
+    "summary": "Explains retention periods, deletion responsibilities, and exception handling for business data.",
+    "acknowledgements": []
+  },
+  {
+    "id": "p3",
+    "title": "Acceptable Use Policy",
+    "version": "2.1",
+    "ownerId": "u2",
+    "status": "Approved",
+    "lastReviewed": "2026-03-11",
+    "nextReviewDate": "2026-09-11",
+    "documentPath": "/documents/acceptable-use-policy.html",
+    "summary": "Describes permitted and prohibited use of company systems, accounts, and digital resources.",
+    "acknowledgements": [
+      {
+        "userId": "u5",
+        "readAt": "2026-03-14T13:20:00.000Z"
+      },
+      {
+        "userId": "u4",
+        "readAt": "2026-03-15T09:05:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "p4",
+    "title": "Vendor Risk Standard",
+    "version": "0.8",
+    "ownerId": "u4",
+    "status": "Draft",
+    "lastReviewed": "2026-04-03",
+    "nextReviewDate": "2026-05-09",
+    "documentPath": "/documents/vendor-risk-standard.html",
+    "summary": "Sets the baseline process for third-party screening, documentation review, and critical supplier reassessment.",
+    "acknowledgements": []
+  }
+]

@@ -1,0 +1,259 @@
+<%- include('partials/header', { title, page }) %>
+
+<section class="dashboard-hero card reveal">
+  <div class="hero-copy-wrap">
+    <div class="hero-badges">
+      <span class="eyebrow">Live governance workspace</span>
+      <span class="hero-pill"><span class="live-dot"></span> Real-time portfolio view</span>
+    </div>
+    <h1>Run governance operations from a cleaner, smarter control center.</h1>
+    <p class="muted hero-copy">
+      Track obligations, policies, review cycles, ownership, acknowledgements, and audit activity in one streamlined dashboard designed for modern internal operations.
+    </p>
+
+    <div class="hero-actions actions">
+      <a class="btn" href="/obligations/new">Create obligation</a>
+      <a class="btn secondary" href="/policies/new">Create policy</a>
+      <a class="btn ghost" href="/activity">View activity</a>
+    </div>
+
+    <div class="hero-progress-grid">
+      <article class="progress-card reveal">
+        <div class="progress-card-head">
+          <span>Obligation completion</span>
+          <strong><%= stats.obligationsCompletionRate %></strong>
+        </div>
+        <div class="meter"><span style="width:<%= stats.obligationsCompletionRate %>"></span></div>
+        <small><%= stats.openObligations %> open of <%= stats.totalObligations %> tracked obligations</small>
+      </article>
+      <article class="progress-card reveal">
+        <div class="progress-card-head">
+          <span>Policy approval</span>
+          <strong><%= stats.policyApprovalRate %></strong>
+        </div>
+        <div class="meter success"><span style="width:<%= stats.policyApprovalRate %>"></span></div>
+        <small><%= stats.totalPolicies - stats.overduePolicies %> active policies across the library</small>
+      </article>
+    </div>
+  </div>
+
+  <aside class="hero-side-panel reveal">
+    <div class="hero-side-top">
+      <div>
+        <span class="small-label">Current profile</span>
+        <h3><%= currentUser ? currentUser.name : 'Active user' %></h3>
+        <p><%= currentUser ? currentUser.accessRole : '' %> • <%= currentUser ? currentUser.department : '' %></p>
+      </div>
+      <div class="avatar xl"><%= currentUser ? (currentUser.initials || currentUser.name.slice(0,2).toUpperCase()) : 'GU' %></div>
+    </div>
+
+    <div class="mini-kpi-grid">
+      <article>
+        <span>Recorded reads</span>
+        <strong><%= stats.acknowledgements %></strong>
+      </article>
+      <article>
+        <span>Reviews due soon</span>
+        <strong><%= stats.dueSoonPolicies %></strong>
+      </article>
+      <article>
+        <span>Urgent obligations</span>
+        <strong><%= stats.overdueObligations + stats.dueSoonObligations %></strong>
+      </article>
+      <article>
+        <span>Open actions</span>
+        <strong><%= stats.openObligations %></strong>
+      </article>
+    </div>
+
+    <div class="pulse-card">
+      <div>
+        <span class="small-label">Workspace pulse</span>
+        <h4>Operational focus</h4>
+      </div>
+      <ul>
+        <li><span></span><%= stats.overdueObligations %> overdue obligations require immediate attention</li>
+        <li><span></span><%= stats.dueSoonPolicies %> policy reviews are due within 30 days</li>
+        <li><span></span><%= stats.acknowledgements %> acknowledgements have been recorded</li>
+      </ul>
+    </div>
+  </aside>
+</section>
+
+<section class="kpi-grid reveal-group">
+  <article class="kpi-card reveal accent-blue">
+    <div class="kpi-icon">◎</div>
+    <div>
+      <span class="stat-label">Total obligations</span>
+      <strong class="kpi-value"><%= stats.totalObligations %></strong>
+      <small>Registered external and internal requirements</small>
+    </div>
+  </article>
+  <article class="kpi-card reveal accent-purple">
+    <div class="kpi-icon">◌</div>
+    <div>
+      <span class="stat-label">Open obligations</span>
+      <strong class="kpi-value"><%= stats.openObligations %></strong>
+      <small>Tracked items still under execution</small>
+    </div>
+  </article>
+  <article class="kpi-card reveal accent-amber">
+    <div class="kpi-icon">◔</div>
+    <div>
+      <span class="stat-label">Policy reviews due</span>
+      <strong class="kpi-value"><%= stats.dueSoonPolicies %></strong>
+      <small>Review cycles approaching within 30 days</small>
+    </div>
+  </article>
+  <article class="kpi-card reveal accent-teal">
+    <div class="kpi-icon">▤</div>
+    <div>
+      <span class="stat-label">Policy library</span>
+      <strong class="kpi-value"><%= stats.totalPolicies %></strong>
+      <small>Tracked policy records and ownership</small>
+    </div>
+  </article>
+</section>
+
+<section class="bento-grid">
+  <article class="card panel reveal span-2">
+    <div class="card-heading-row">
+      <div>
+        <span class="section-kicker">Priority queue</span>
+        <h2>Urgent obligations</h2>
+      </div>
+      <a href="/obligations">Open register</a>
+    </div>
+    <% if (urgentObligations.length === 0) { %>
+      <p class="empty-state">No urgent obligations right now.</p>
+    <% } else { %>
+      <div class="modern-list">
+        <% urgentObligations.forEach(item => { %>
+          <a class="modern-item" href="/obligations/<%= item.id %>">
+            <div class="modern-item-main">
+              <div class="item-icon small">◎</div>
+              <div>
+                <strong><%= item.title %></strong>
+                <span><%= item.owner ? item.owner.name : 'Unknown owner' %> • <%= item.source %></span>
+              </div>
+            </div>
+            <div class="modern-item-meta">
+              <span class="badge <%= statusClass(item.status, item.overdue) %>"><%= item.status %></span>
+              <small><%= formatDate(item.deadline) %></small>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+    <% } %>
+  </article>
+
+  <article class="card panel reveal">
+    <div class="card-heading-row">
+      <div>
+        <span class="section-kicker">Review queue</span>
+        <h2>Upcoming policy reviews</h2>
+      </div>
+      <a href="/policies">View library</a>
+    </div>
+    <% if (upcomingPolicies.length === 0) { %>
+      <p class="empty-state">No policy reviews scheduled.</p>
+    <% } else { %>
+      <div class="modern-list compact">
+        <% upcomingPolicies.forEach(item => { %>
+          <a class="modern-item vertical" href="/policies/<%= item.id %>">
+            <div class="modern-item-main">
+              <div class="item-icon soft">▤</div>
+              <div>
+                <strong><%= item.title %></strong>
+                <span>Version <%= item.version %> • <%= item.owner ? item.owner.name : 'Unknown owner' %></span>
+              </div>
+            </div>
+            <div class="modern-item-meta">
+              <span class="badge <%= statusClass(item.status, item.overdue) %>"><%= item.status %></span>
+              <small><%= formatDate(item.nextReviewDate) %></small>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+    <% } %>
+  </article>
+
+  <article class="card panel reveal">
+    <div class="card-heading-row">
+      <div>
+        <span class="section-kicker">Audit trace</span>
+        <h2>Recent activity</h2>
+      </div>
+      <a href="/activity">Full log</a>
+    </div>
+    <% if (recentActivity.length === 0) { %>
+      <p class="empty-state">No audit activity available.</p>
+    <% } else { %>
+      <div class="timeline-list">
+        <% recentActivity.slice(0,6).forEach(entry => { %>
+          <a class="timeline-item" href="<%= entry.href %>">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <strong><%= entry.label %></strong>
+              <span><%= entry.actor ? entry.actor.name : 'Unknown user' %> • <%= entry.entityLabel %></span>
+            </div>
+            <small><%= formatDateTime(entry.timestamp) %></small>
+          </a>
+        <% }) %>
+      </div>
+    <% } %>
+  </article>
+
+  <article class="card panel reveal span-2">
+    <div class="card-heading-row">
+      <div>
+        <span class="section-kicker">Ownership</span>
+        <h2>Owner workload</h2>
+      </div>
+      <a href="/users">Open users</a>
+    </div>
+    <div class="owner-grid">
+      <% ownerWorkload.forEach(user => { %>
+        <div class="owner-card">
+          <div class="owner-head">
+            <div class="avatar gradient"><%= user.initials %></div>
+            <div>
+              <strong><%= user.name %></strong>
+              <span><%= user.accessRole %></span>
+            </div>
+          </div>
+          <div class="owner-stats">
+            <div><small>Open obligations</small><strong><%= user.obligationCount %></strong></div>
+            <div><small>Active policies</small><strong><%= user.policyCount %></strong></div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </article>
+
+  <article class="card panel reveal span-2">
+    <div class="card-heading-row">
+      <div>
+        <span class="section-kicker">Snapshot</span>
+        <h2>Policy library overview</h2>
+      </div>
+      <a href="/policies">Open library</a>
+    </div>
+    <div class="data-grid">
+      <% policies.forEach(item => { %>
+        <a class="data-row" href="/policies/<%= item.id %>">
+          <div>
+            <strong><%= item.title %></strong>
+            <span><%= item.owner ? item.owner.name : 'Unknown' %> • Review <%= formatDate(item.nextReviewDate) %></span>
+          </div>
+          <div class="data-row-right">
+            <span class="badge <%= statusClass(item.status, item.overdue) %>"><%= item.status %></span>
+            <small><%= item.acknowledgementCount %> reads</small>
+          </div>
+        </a>
+      <% }) %>
+    </div>
+  </article>
+</section>
+
+<%- include('partials/footer') %>

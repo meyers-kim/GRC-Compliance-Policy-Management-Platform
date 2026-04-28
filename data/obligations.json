@@ -1,0 +1,92 @@
+[
+  {
+    "id": "o1",
+    "title": "Maintain incident reporting procedure",
+    "source": "NIS2",
+    "category": "Cybersecurity",
+    "ownerId": "u2",
+    "status": "In Progress",
+    "deadline": "2026-05-15",
+    "actions": [
+      "Define internal escalation path",
+      "Document reporting timeline",
+      "Train incident response team"
+    ],
+    "evidence": [
+      "incident-procedure-v1.pdf",
+      "training-attendance.xlsx"
+    ],
+    "notes": "Procedure draft exists but still needs management approval."
+  },
+  {
+    "id": "o2",
+    "title": "Review employee privacy notice",
+    "source": "GDPR",
+    "category": "Data Protection",
+    "ownerId": "u1",
+    "status": "Open",
+    "deadline": "2026-04-28",
+    "actions": [
+      "Check lawful basis section",
+      "Update retention information",
+      "Confirm transparency wording"
+    ],
+    "evidence": [
+      "privacy-notice-draft.docx"
+    ],
+    "notes": "Needs legal review before publication."
+  },
+  {
+    "id": "o3",
+    "title": "Complete annual access review",
+    "source": "ISO 27001",
+    "category": "Access Control",
+    "ownerId": "u2",
+    "status": "Completed",
+    "deadline": "2026-04-05",
+    "actions": [
+      "Review administrator accounts",
+      "Revoke unnecessary permissions"
+    ],
+    "evidence": [
+      "access-review-report.pdf",
+      "approval-email.msg"
+    ],
+    "notes": "Completed and archived for audit evidence."
+  },
+  {
+    "id": "o4",
+    "title": "Update third-party risk questionnaire",
+    "source": "DORA",
+    "category": "Vendor Risk",
+    "ownerId": "u4",
+    "status": "In Progress",
+    "deadline": "2026-05-03",
+    "actions": [
+      "Add subcontractor section",
+      "Align minimum evidence requests",
+      "Map critical supplier criteria"
+    ],
+    "evidence": [
+      "vendor-questionnaire-v2.xlsx"
+    ],
+    "notes": "Must be finalized before the next supplier onboarding cycle."
+  },
+  {
+    "id": "o5",
+    "title": "Validate employee onboarding control checklist",
+    "source": "Internal Control",
+    "category": "HR Governance",
+    "ownerId": "u3",
+    "status": "Open",
+    "deadline": "2026-06-12",
+    "actions": [
+      "Confirm policy sign-off step",
+      "Add security training reference"
+    ],
+    "evidence": [
+      "onboarding-checklist.docx"
+    ],
+    "notes": "Needed to align HR and IT handover steps."
+  }
+]

@@ -1,0 +1,147 @@
+<%- include('partials/header', { title, page }) %>
+
+<section class="page-heading compact-page-heading">
+  <div>
+    <div class="breadcrumbs"><a href="/policies">Policies</a> / <span><%= policy.title %></span></div>
+    <h1><%= policy.title %></h1>
+    <div class="meta-row">
+      <span class="badge <%= statusClass(policy.status, policy.overdue) %>"><%= policy.status %></span>
+      <span class="muted">Version <%= policy.version %></span>
+    </div>
+  </div>
+  <div class="actions">
+    <a class="btn secondary" href="/policies">Back</a>
+    <a class="btn" href="/policies/<%= policy.id %>/edit">Edit policy</a>
+  </div>
+</section>
+
+<section class="split split-3 wide-gap policy-layout">
+  <article class="card detail-main">
+    <h2>Policy overview</h2>
+    <div class="info-grid">
+      <div>
+        <span class="info-label">Owner</span>
+        <strong><%= policy.owner ? policy.owner.name : 'Unknown' %></strong>
+        <small><%= policy.owner ? policy.owner.role : 'No role assigned' %></small>
+      </div>
+      <div>
+        <span class="info-label">Last reviewed</span>
+        <strong><%= formatDate(policy.lastReviewed) %></strong>
+        <small>Most recent review date</small>
+      </div>
+      <div>
+        <span class="info-label">Next review</span>
+        <strong><%= formatDate(policy.nextReviewDate) %></strong>
+        <small><%= policy.overdue ? 'Review overdue' : policy.dueSoon ? 'Due within 30 days' : 'Review scheduled' %></small>
+      </div>
+      <div>
+        <span class="info-label">Acknowledgements</span>
+        <strong><%= acknowledgements.length %></strong>
+        <small>Employee read confirmations</small>
+      </div>
+    </div>
+
+    <div class="content-block">
+      <h3>Summary</h3>
+      <p><%= policy.summary || 'No summary provided.' %></p>
+    </div>
+
+    <div class="content-block">
+      <h3>Document link</h3>
+      <% if (policy.documentPath) { %>
+        <a class="btn ghost" href="<%= policy.documentPath %>" target="_blank" rel="noreferrer">Open linked document</a>
+      <% } else { %>
+        <p class="empty-state">No linked document.</p>
+      <% } %>
+    </div>
+  </article>
+
+  <aside class="card side-card acknowledge-card">
+    <h2>Acknowledge policy</h2>
+    <p class="muted">Record that an employee has read and understood this policy.</p>
+    <form method="POST" action="/policies/<%= policy.id %>/acknowledge">
+      <div>
+        <label for="userId">Employee</label>
+        <select id="userId" name="userId" required>
+          <option value="">Select employee</option>
+          <% users.forEach(user => { %>
+            <option value="<%= user.id %>"><%= user.name %> — <%= user.role %></option>
+          <% }) %>
+        </select>
+      </div>
+      <div class="actions form-actions compact-top-gap">
+        <button type="submit">Confirm acknowledgement</button>
+      </div>
+    </form>
+  </aside>
+
+  <aside class="card side-card">
+    <div class="card-heading-row">
+      <h2>Related activity</h2>
+      <a href="/activity">Full log</a>
+    </div>
+    <% if (!relatedActivity.length) { %>
+      <p class="empty-state">No activity has been logged for this policy yet.</p>
+    <% } else { %>
+      <div class="stack-list compact-stack">
+        <% relatedActivity.forEach(entry => { %>
+          <div class="stack-item no-link">
+            <div>
+              <strong><%= entry.label %></strong>
+              <span><%= entry.actor ? entry.actor.name : 'Unknown user' %></span>
+            </div>
+            <div class="align-right">
+              <small><%= formatDateTime(entry.timestamp) %></small>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </aside>
+</section>
+
+<section class="table-card card">
+  <div class="card-heading-row">
+    <h2>Acknowledgement log</h2>
+    <span class="muted">Employee read confirmations</span>
+  </div>
+
+  <% if (acknowledgements.length === 0) { %>
+    <p class="empty-state">No acknowledgements have been recorded yet.</p>
+  <% } else { %>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Role</th>
+            <th>Department</th>
+            <th>Read at</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% acknowledgements.forEach(entry => { %>
+            <tr>
+              <td><%= entry.user ? entry.user.name : 'Unknown' %></td>
+              <td><%= entry.user ? entry.user.role : '—' %></td>
+              <td><%= entry.user ? entry.user.department : '—' %></td>
+              <td><%= formatDateTime(entry.readAt) %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>
+
+<section class="danger-zone card">
+  <div>
+    <h2>Delete policy</h2>
+    <p class="muted">Use this only if the policy entry should no longer exist in the register.</p>
+  </div>
+  <form method="POST" action="/policies/<%= policy.id %>/delete" data-confirm="Delete this policy permanently?">
+    <button class="danger" type="submit">Delete policy</button>
+  </form>
+</section>
+
+<%- include('partials/footer') %>

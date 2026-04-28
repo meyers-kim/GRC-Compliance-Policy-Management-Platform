@@ -1,0 +1,114 @@
+<%- include('partials/header', { title, page }) %>
+
+<section class="page-heading compact-page-heading">
+  <div>
+    <div class="breadcrumbs"><a href="/obligations">Obligations</a> / <span><%= obligation.title %></span></div>
+    <h1><%= obligation.title %></h1>
+    <div class="meta-row">
+      <span class="badge <%= statusClass(obligation.status, obligation.overdue) %>"><%= obligation.status %></span>
+      <span class="muted">Source: <%= obligation.source %></span>
+      <span class="muted">Category: <%= obligation.category %></span>
+    </div>
+  </div>
+  <div class="actions">
+    <a class="btn secondary" href="/obligations">Back</a>
+    <a class="btn" href="/obligations/<%= obligation.id %>/edit">Edit obligation</a>
+  </div>
+</section>
+
+<section class="split split-3 wide-gap">
+  <article class="card detail-main">
+    <h2>Overview</h2>
+    <div class="info-grid">
+      <div>
+        <span class="info-label">Owner</span>
+        <strong><%= obligation.owner ? obligation.owner.name : 'Unknown' %></strong>
+        <small><%= obligation.owner ? obligation.owner.role : 'No role assigned' %></small>
+      </div>
+      <div>
+        <span class="info-label">Deadline</span>
+        <strong><%= formatDate(obligation.deadline) %></strong>
+        <small><%= obligation.overdue ? 'Overdue item' : obligation.dueSoon ? 'Due within 30 days' : 'Schedule under control' %></small>
+      </div>
+      <div>
+        <span class="info-label">Required actions</span>
+        <strong><%= obligation.actionCount %></strong>
+        <small>Tracked remediation steps</small>
+      </div>
+      <div>
+        <span class="info-label">Evidence files</span>
+        <strong><%= obligation.evidenceCount %></strong>
+        <small>Registered audit references</small>
+      </div>
+    </div>
+  </article>
+
+  <article class="card side-card">
+    <h2>Action plan</h2>
+    <% if (!obligation.actions || obligation.actions.length === 0) { %>
+      <p class="empty-state">No actions recorded.</p>
+    <% } else { %>
+      <ul class="feature-list">
+        <% obligation.actions.forEach(action => { %>
+          <li><%= action %></li>
+        <% }) %>
+      </ul>
+    <% } %>
+  </article>
+
+  <article class="card side-card">
+    <h2>Evidence</h2>
+    <% if (!obligation.evidence || obligation.evidence.length === 0) { %>
+      <p class="empty-state">No evidence attached.</p>
+    <% } else { %>
+      <ul class="feature-list">
+        <% obligation.evidence.forEach(doc => { %>
+          <li><%= doc %></li>
+        <% }) %>
+      </ul>
+    <% } %>
+  </article>
+</section>
+
+<section class="split split-2 wide-gap">
+  <section class="card">
+    <h2>Notes</h2>
+    <p><%= obligation.notes || 'No notes provided for this obligation.' %></p>
+  </section>
+
+  <section class="card">
+    <div class="card-heading-row">
+      <h2>Related activity</h2>
+      <a href="/activity">Open log</a>
+    </div>
+    <% if (!relatedActivity.length) { %>
+      <p class="empty-state">No activity has been logged for this obligation yet.</p>
+    <% } else { %>
+      <div class="stack-list compact-stack">
+        <% relatedActivity.forEach(entry => { %>
+          <div class="stack-item no-link">
+            <div>
+              <strong><%= entry.label %></strong>
+              <span><%= entry.actor ? entry.actor.name : 'Unknown user' %></span>
+            </div>
+            <div class="align-right">
+              <small><%= formatDateTime(entry.timestamp) %></small>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </section>
+</section>
+
+<section class="danger-zone card">
+  <div>
+    <h2>Delete obligation</h2>
+    <p class="muted">Use this only if the record was created by mistake.</p>
+  </div>
+  <form method="POST" action="/obligations/<%= obligation.id %>/delete" data-confirm="Delete this obligation permanently?">
+    <button class="danger" type="submit">Delete obligation</button>
+  </form>
+</section>
+
+<%- include('partials/footer') %>
